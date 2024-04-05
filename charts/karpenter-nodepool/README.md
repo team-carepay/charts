@@ -14,53 +14,30 @@ A Helm chart for Karpenter Node pool, it will create the NodePool and the Ec2Nod
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| ec2NodeClass.default.amiFamily | string | `"AL2"` |  |
-| ec2NodeClass.default.amiSelectorTermsTags | object | `{}` |  |
-| ec2NodeClass.default.blockDeviceMappings | object | `{}` |  |
-| ec2NodeClass.default.detailedMonitoring | bool | `false` |  |
-| ec2NodeClass.default.instanceProfile | string | `""` |  |
-| ec2NodeClass.default.metadataOptions | object | `{}` |  |
-| ec2NodeClass.default.role | string | `""` |  |
-| ec2NodeClass.default.securityGroupSelectorTermsTags | object | `{}` |  |
-| ec2NodeClass.default.subnetSelectorTermsTags | object | `{}` |  |
-| ec2NodeClass.default.tags | object | `{}` |  |
-| ec2NodeClass.default.userData | string | `""` |  |
+| ec2NodeClass.default.amiFamily | string | `"AL2"` | Required, resolves a default ami and userdata |
+| ec2NodeClass.default.amiSelectorTermsTags | object | `{}` | karpenter.sh/discovery: cluster-name |
+| ec2NodeClass.default.blockDeviceMappings | object | `{}` | snapshotID: snap-0123456789 |
+| ec2NodeClass.default.detailedMonitoring | bool | `false` | Optional, configures detailed monitoring for the instance |
+| ec2NodeClass.default.instanceProfile | string | `""` | Must specify one of "role" or "instanceProfile" for Karpenter to launch nodes |
+| ec2NodeClass.default.metadataOptions | object | `{}` | httpTokens: required |
+| ec2NodeClass.default.role | string | `""` | Must specify one of "role" or "instanceProfile" for Karpenter to launch nodes |
+| ec2NodeClass.default.securityGroupSelectorTermsTags | object | `{}` | karpenter.sh/discovery: cluster-name |
+| ec2NodeClass.default.subnetSelectorTermsTags | object | `{}` | karpenter.sh/discovery: cluster-name |
+| ec2NodeClass.default.tags | object | `{}` | Optional, propagates tags to underlying EC2 resources |
+| ec2NodeClass.default.userData | string | `""` | echo "Hello world" |
 | globalAnnotations | object | `{}` |  |
 | globalLabels | object | `{}` |  |
-| nodePool.default.annotations | object | `{}` |  |
-| nodePool.default.disruption.consolidationPolicy | string | `"WhenUnderutilized"` |  |
-| nodePool.default.disruption.expireAfter | string | `"720h"` |  |
-| nodePool.default.kubelet | object | `{}` |  |
-| nodePool.default.labels | object | `{}` |  |
-| nodePool.default.limits.cpu | int | `1000` |  |
-| nodePool.default.limits.memory | string | `"1000Gi"` |  |
-| nodePool.default.nodeClassRef | string | `"default"` |  |
-| nodePool.default.requirements[0].key | string | `"karpenter.k8s.aws/instance-category"` |  |
-| nodePool.default.requirements[0].operator | string | `"In"` |  |
-| nodePool.default.requirements[0].values[0] | string | `"c"` |  |
-| nodePool.default.requirements[0].values[1] | string | `"m"` |  |
-| nodePool.default.requirements[0].values[2] | string | `"r"` |  |
-| nodePool.default.requirements[1].key | string | `"karpenter.k8s.aws/instance-cpu"` |  |
-| nodePool.default.requirements[1].operator | string | `"In"` |  |
-| nodePool.default.requirements[1].values[0] | string | `"4"` |  |
-| nodePool.default.requirements[1].values[1] | string | `"8"` |  |
-| nodePool.default.requirements[1].values[2] | string | `"16"` |  |
-| nodePool.default.requirements[1].values[3] | string | `"32"` |  |
-| nodePool.default.requirements[2].key | string | `"karpenter.k8s.aws/instance-hypervisor"` |  |
-| nodePool.default.requirements[2].operator | string | `"In"` |  |
-| nodePool.default.requirements[2].values[0] | string | `"nitro"` |  |
-| nodePool.default.requirements[3].key | string | `"karpenter.k8s.aws/instance-generation"` |  |
-| nodePool.default.requirements[3].operator | string | `"Gt"` |  |
-| nodePool.default.requirements[3].values[0] | string | `"2"` |  |
-| nodePool.default.requirements[4].key | string | `"kubernetes.io/arch"` |  |
-| nodePool.default.requirements[4].operator | string | `"In"` |  |
-| nodePool.default.requirements[4].values[0] | string | `"amd64"` |  |
-| nodePool.default.requirements[5].key | string | `"karpenter.sh/capacity-type"` |  |
-| nodePool.default.requirements[5].operator | string | `"In"` |  |
-| nodePool.default.requirements[5].values[0] | string | `"spot"` |  |
-| nodePool.default.requirements[5].values[1] | string | `"on-demand"` |  |
-| nodePool.default.startupTaints | list | `[]` |  |
-| nodePool.default.taints | list | `[]` |  |
+| nodePool.default.annotations | object | `{}` | Annotations are arbitrary key-values that are applied to all nodes |
+| nodePool.default.disruption | object | `{"consolidationPolicy":"WhenUnderutilized","expireAfter":"720h"}` | like rolling Nodes due to them hitting their maximum lifetime (expiry) or scaling down nodes to reduce cluster cost |
+| nodePool.default.disruption.consolidationPolicy | string | `"WhenUnderutilized"` | If using `WhenEmpty`, Karpenter will only consider nodes for consolidation that contain no workload pods |
+| nodePool.default.disruption.expireAfter | string | `"720h"` | You can choose to disable expiration entirely by setting the string value 'Never' here |
+| nodePool.default.kubelet | object | `{}` | maxPods: 20 |
+| nodePool.default.labels | object | `{}` | Labels are arbitrary key-values that are applied to all nodes |
+| nodePool.default.limits | object | `{"cpu":1000,"memory":"1000Gi"}` | Limits prevent Karpenter from creating new instances once the limit is exceeded. |
+| nodePool.default.nodeClassRef | string | `"default"` | References the Cloud Provider's NodeClass resource, see your cloud provider specific documentation |
+| nodePool.default.requirements | list | `[{"key":"karpenter.k8s.aws/instance-category","operator":"In","values":["c","m","r"]},{"key":"karpenter.k8s.aws/instance-cpu","operator":"In","values":["4","8","16","32"]},{"key":"karpenter.k8s.aws/instance-hypervisor","operator":"In","values":["nitro"]},{"key":"karpenter.k8s.aws/instance-generation","operator":"Gt","values":["2"]},{"key":"kubernetes.io/arch","operator":"In","values":["amd64"]},{"key":"karpenter.sh/capacity-type","operator":"In","values":["spot","on-demand"]}]` | https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#operators |
+| nodePool.default.startupTaints | list | `[]` | effect: NoSchedule  |
+| nodePool.default.taints | list | `[]` | effect: NoSchedule |
 
 ----------------------------------------------
 Autogenerated from chart metadata using [helm-docs v1.13.1](https://github.com/norwoodj/helm-docs/releases/v1.13.1)
