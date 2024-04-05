@@ -4,11 +4,11 @@
 
 A Helm chart for Karpenter Node pool, it will create the NodePool and the Ec2NodeClass.
 
-**Homepage:** <https://github.com/team-carepay/charts/charts/karpenter-nodepool>
+**Homepage:** <https://github.com/team-carepay/charts>
 
 ## Source Code
 
-* <https://github.com/team-carepay/karpenter-charts>
+* <https://github.com/team-carepay/charts>
 
 ## Values
 
