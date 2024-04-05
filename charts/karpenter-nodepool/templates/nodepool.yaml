@@ -1,0 +1,55 @@
+{{- range $key, $value := .Values.nodePool }}
+apiVersion: karpenter.sh/v1beta1
+kind: NodePool
+metadata:
+  name: {{ $key }}
+spec:
+  template:
+    metadata:
+      labels:
+{{ template "nodePool.labels" (dict "labels" .labels "Release" $.Release "Chart" $.Chart "globalLabels" $.Values.globalLabels) }}  
+      {{- with (merge .annotations $.Values.globalAnnotations) }}
+      annotations:
+        {{ toYaml . }}
+      {{- end }}
+    spec:
+      nodeClassRef:
+        name: {{ default "default" .nodeClassRef }}
+      {{- with .taints }}
+      taints:
+        {{ toYaml . }}
+      {{- end }}
+      
+      {{- with .startupTaints }}
+      startupTaints:
+        {{ toYaml . }}
+      {{- end }}
+            
+      requirements:
+{{ toYaml .requirements | indent 8}}
+
+      {{- with .kubelet }}
+      kubelet:
+        {{ toYaml .kubelet }}
+      {{- end }}
+
+  
+  {{- if .disruption }}
+  disruption: 
+    consolidationPolicy: {{ default "WhenUnderutilized" .disruption.consolidationPolicy }}
+    {{- if .disruption.consolidateAfter }}
+    consolidateAfter: {{ .disruption.consolidateAfter }}
+    {{- end }}
+    expireAfter: {{ default "720h" .disruption.expireAfter }}
+  {{- end }}
+
+  {{- if .limits }}
+  limits:
+    cpu: {{ default 1000 .limits.cpu }}
+    memory: {{ default "1000Gi" .limits.memory }}
+  {{- end }}
+  
+  {{- if .weight }}
+  weight: {{ .weight }}
+  {{- end }}
+{{- end }}
