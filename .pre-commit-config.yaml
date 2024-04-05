@@ -6,3 +6,4 @@ repos:
         args:
           # Make the tool search for charts only under the `charts` directory
           - --chart-search-root=charts
+          - --template-files=charts/README.md.gotmpl
