@@ -8,7 +8,7 @@ keywords:
   - cluster
   - node
   - autoscaling
-home: https://github.com/team-carepay/karpenter-charts
+home: https://github.com/team-carepay/charts/charts/karpenter-charts
 icon: https://repository-images.githubusercontent.com/278480393/dab059c8-caa1-4b55-aaa7-3d30e47a5616
 sources:
   - https://github.com/team-carepay/karpenter-charts
