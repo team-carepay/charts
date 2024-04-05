@@ -1,0 +1,13 @@
+apiVersion: v2
+name: s3-helm-proxy
+description: S3 proxy to enable the comunication between the S3 and the Argocd server
+type: application
+version: 0.1.0
+appVersion: "2.0"
+keywords:
+  - argocd s3
+  - argocd proxy s3
+home: https://github.com/team-carepay/charts
+icon: https://repository-images.githubusercontent.com/278480393/dab059c8-caa1-4b55-aaa7-3d30e47a5616
+sources:
+  - https://github.com/team-carepay/charts

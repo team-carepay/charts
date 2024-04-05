@@ -1,14 +1,17 @@
 # karpenter-nodepool
 
-![Version: 0.0.7](https://img.shields.io/badge/Version-0.0.7-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
-
 A Helm chart for Karpenter Node pool, it will create the NodePool and the Ec2NodeClass.
 
-**Homepage:** <https://github.com/team-carepay/charts>
+![Version: 0.0.7](https://img.shields.io/badge/Version-0.0.7-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
 
-## Source Code
+## Installing the Chart
 
-* <https://github.com/team-carepay/charts>
+To install the chart:
+
+```console
+$ helm repo add carepay https://team-carepay.github.io/charts
+$ helm install karpenter-nodepool carepay/karpenter-nodepool
+```
 
 ## Values
 

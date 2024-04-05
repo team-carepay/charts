@@ -1,0 +1,20 @@
+# -- Annotations for the deployed Deployment
+annotations: {}
+
+# -- Environment variables to pass to the deployment
+envs: []
+
+serviceAccount:
+  # -- Create a service account
+  create: false
+  # -- Service account name
+  name: ""
+
+# -- Resource limits and requests
+resources:
+  requests:
+    memory: 50Mi
+    cpu: 10m
+  limits:
+    memory: 256Mi
+    cpu: ""
