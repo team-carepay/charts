@@ -7,17 +7,18 @@ metadata:
 spec:
   weight: {{ .weight | default 10 }}
   template:
+    {{- if .labels }}
+    metadata:
+      labels:
+        {{- range $k, $v := .labels }}
+        {{ $k }}: {{ $v }}
+        {{- end }}
+    {{- end }}
     spec:
       nodeClassRef:
         group: karpenter.k8s.aws
         kind: EC2NodeClass
         name: {{ .nodeClassName }}
-      {{- if .labels }}
-      labels:
-        {{- range $k, $v := .labels }}
-        {{ $k }}: {{ $v }}
-        {{- end }}
-      {{- end }}
       {{- if .taints }}
       taints:
         {{- range .taints }}
