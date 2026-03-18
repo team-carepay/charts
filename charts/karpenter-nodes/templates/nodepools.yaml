@@ -1,0 +1,61 @@
+{{- range .Values.nodepools }}
+---
+apiVersion: karpenter.sh/v1
+kind: NodePool
+metadata:
+  name: {{ .name }}
+spec:
+  weight: {{ .weight | default 10 }}
+  template:
+    spec:
+      nodeClassRef:
+        group: karpenter.k8s.aws
+        kind: EC2NodeClass
+        name: {{ .nodeClassName }}
+      {{- if .labels }}
+      labels:
+        {{- range $k, $v := .labels }}
+        {{ $k }}: {{ $v }}
+        {{- end }}
+      {{- end }}
+      {{- if .taints }}
+      taints:
+        {{- range .taints }}
+        - key: {{ .key }}
+          value: {{ .value }}
+          effect: {{ .effect }}
+        {{- end }}
+      {{- end }}
+      requirements:
+        - key: karpenter.sh/capacity-type
+          operator: In
+          values: {{ .capacityTypes | toJson }}
+        - key: kubernetes.io/arch
+          operator: In
+          values: {{ .arch | default (list "amd64") | toJson }}
+        - key: kubernetes.io/os
+          operator: In
+          values: ["linux"]
+        - key: eks.amazonaws.com/instance-category
+          operator: In
+          values: {{ .instanceCategories | toJson }}
+        - key: eks.amazonaws.com/instance-generation
+          operator: {{ .instanceGeneration.operator | default "Gt" }}
+          values: {{ .instanceGeneration.values | toJson }}
+        - key: eks.amazonaws.com/instance-size
+          operator: NotIn
+          values: {{ .instanceSizeExcludes | default (list "nano" "micro" "small") | toJson }}
+        {{- if .capacitySpreadLabels }}
+        - key: capacity-spread
+          operator: In
+          values: {{ .capacitySpreadLabels | toJson }}
+        {{- end }}
+  disruption:
+    consolidationPolicy: {{ .consolidationPolicy }}
+    consolidateAfter: {{ .consolidateAfter }}
+  {{- if .limits }}
+  limits:
+    cpu: {{ .limits.cpu | quote }}
+    memory: {{ .limits.memory }}
+  {{- end }}
+{{- end }}

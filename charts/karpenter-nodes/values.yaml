@@ -1,0 +1,27 @@
+clusterName: ""
+
+nodeclasses: []
+# - name: general
+#   amiAlias: al2023@latest
+#   subnetTier: private
+#   volumeSize: 50Gi
+#   volumeType: gp3
+
+nodepools: []
+# - name: general
+#   nodeClassName: general
+#   weight: 10
+#   taints: []
+#   capacityTypes: ["spot"]
+#   arch: ["amd64"]
+#   instanceCategories: ["c", "m", "r"]
+#   instanceGeneration:
+#     operator: Gt       # Gt (minimum) or In (exact list)
+#     values: ["4"]      # single minimum or multiple: ["6", "7"]
+#   instanceSizeExcludes: ["nano", "micro", "small"]
+#   capacitySpreadLabels: []  # e.g., ["1-s", "2-s", "3-s"] for spot or ["1-od", "2-od"] for on-demand
+#   consolidationPolicy: WhenEmptyOrUnderutilized
+#   consolidateAfter: 1m
+#   limits:
+#     cpu: "1000"
+#     memory: 1000Gi

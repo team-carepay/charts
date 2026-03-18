@@ -1,0 +1,26 @@
+{{- range .Values.nodeclasses }}
+---
+apiVersion: karpenter.k8s.aws/v1
+kind: EC2NodeClass
+metadata:
+  name: {{ .name }}
+spec:
+  role: {{ include "karpenter-nodes.nodeRole" $ }}
+  amiSelectorTerms:
+    - alias: {{ .amiAlias | default "al2023@latest" }}
+  subnetSelectorTerms:
+    - tags:
+        Tier: {{ .subnetTier | default "private" }}
+  securityGroupSelectorTerms:
+    - tags:
+        karpenter.sh/discovery: {{ include "karpenter-nodes.discoveryTag" $ }}
+  blockDeviceMappings:
+    - deviceName: /dev/xvda
+      ebs:
+        volumeSize: {{ .volumeSize | default "50Gi" }}
+        volumeType: {{ .volumeType | default "gp3" }}
+        encrypted: true
+  tags:
+    karpenter.sh/discovery: {{ include "karpenter-nodes.discoveryTag" $ }}
+    workload: {{ .name }}
+{{- end }}
