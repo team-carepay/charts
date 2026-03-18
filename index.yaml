@@ -39,6 +39,16 @@ entries:
     urls:
     - https://github.com/team-carepay/charts/releases/download/karpenter-nodepool-0.0.7/karpenter-nodepool-0.0.7.tgz
     version: 0.0.7
+  karpenter-nodes:
+  - apiVersion: v2
+    created: "2026-03-18T18:53:02.29616982Z"
+    description: Helm chart for deploying Karpenter EC2NodeClass and NodePool resources
+    digest: cfadbf043df0ca780e38b23a8b19293ef62bc310867c56ad5cfe73c04ed942b6
+    name: karpenter-nodes
+    type: application
+    urls:
+    - https://github.com/team-carepay/charts/releases/download/karpenter-nodes-0.2.0/karpenter-nodes-0.2.0.tgz
+    version: 0.2.0
   s3-helm-proxy:
   - apiVersion: v2
     appVersion: "2.0"
@@ -58,4 +68,4 @@ entries:
     urls:
     - https://github.com/team-carepay/charts/releases/download/s3-helm-proxy-0.1.0/s3-helm-proxy-0.1.0.tgz
     version: 0.1.0
-generated: "2024-04-05T14:45:22.801591169Z"
+generated: "2026-03-18T18:53:02.296179367Z"
