@@ -37,13 +37,13 @@ spec:
         - key: kubernetes.io/os
           operator: In
           values: ["linux"]
-        - key: eks.amazonaws.com/instance-category
+        - key: karpenter.k8s.aws/instance-category
           operator: In
           values: {{ .instanceCategories | toJson }}
-        - key: eks.amazonaws.com/instance-generation
+        - key: karpenter.k8s.aws/instance-generation
           operator: {{ .instanceGeneration.operator | default "Gt" }}
           values: {{ .instanceGeneration.values | toJson }}
-        - key: eks.amazonaws.com/instance-size
+        - key: karpenter.k8s.aws/instance-size
           operator: NotIn
           values: {{ .instanceSizeExcludes | default (list "nano" "micro" "small") | toJson }}
         {{- if .capacitySpreadLabels }}
