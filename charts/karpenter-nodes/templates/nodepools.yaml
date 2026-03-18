@@ -51,6 +51,11 @@ spec:
           operator: In
           values: {{ .capacitySpreadLabels | toJson }}
         {{- end }}
+        {{- range $k, $v := .labels }}
+        - key: {{ $k }}
+          operator: In
+          values: [{{ $v | quote }}]
+        {{- end }}
   disruption:
     consolidationPolicy: {{ .consolidationPolicy }}
     consolidateAfter: {{ .consolidateAfter }}
