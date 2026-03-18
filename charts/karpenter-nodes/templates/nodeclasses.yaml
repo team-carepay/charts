@@ -20,6 +20,11 @@ spec:
         volumeSize: {{ .volumeSize | default "50Gi" }}
         volumeType: {{ .volumeType | default "gp3" }}
         encrypted: true
+  metadataOptions:
+    httpEndpoint: enabled
+    httpProtocolIPv6: disabled
+    httpPutResponseHopLimit: 2
+    httpTokens: required
   tags:
     karpenter.sh/discovery: {{ include "karpenter-nodes.discoveryTag" $ }}
     workload: {{ .name }}
