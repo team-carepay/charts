@@ -9,6 +9,7 @@ jobs:
   release:
     permissions:
       contents: write
+      packages: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -21,7 +22,28 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.6.0
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Login to GHCR
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | helm registry login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Push charts to GHCR OCI
+        run: |
+          mkdir -p /tmp/helm-packages
+          for chart in charts/*/; do
+            chart_name=$(basename "$chart")
+            helm package "$chart" --destination /tmp/helm-packages
+            helm push /tmp/helm-packages/${chart_name}-*.tgz oci://ghcr.io/${{ github.repository_owner }}/charts
+            curl -s -X PATCH \
+              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/orgs/${{ github.repository_owner }}/packages/container/charts%2F${chart_name}" \
+              -d '{"visibility":"private"}'
+          done
