@@ -9,6 +9,7 @@ nodeclasses: []
 
 nodepools: []
 # - name: general
+#   macPods: 110
 #   nodeClassName: general
 #   weight: 10
 #   taints: []
