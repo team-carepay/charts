@@ -15,8 +15,6 @@ spec:
         {{- end }}
     {{- end }}
     spec:
-      kubelet:
-        maxPods: {{ .maxPods | default 110 }}
       nodeClassRef:
         group: karpenter.k8s.aws
         kind: EC2NodeClass
