@@ -22,6 +22,7 @@ spec:
         volumeSize: {{ .volumeSize | default "50Gi" }}
         volumeType: {{ .volumeType | default "gp3" }}
         encrypted: true
+  detailedMonitoring: {{ .detailedMonitoring | default false }}
   metadataOptions:
     httpEndpoint: enabled
     httpProtocolIPv6: disabled
